@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet">
+  <title>Giveaway</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 1916px;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+      flex-direction: column;
+      background: white url('C:/Users/Vik/Desktop/giveaway/bg3.png') no-repeat center top;
+      background-size: auto;
+    }
+
+    #wrapper {
+      position: absolute;
+      top: 1054px;
+      width: 100%;
+      height: 80.3vh;
+      overflow: hidden;
+    }
+
+    #bgList {
+      position: absolute;
+      top: 0;
+      left: 51.2%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      opacity: 0.3;
+      z-index: 1;
+      --scrollDistance: 0px;
+      --scrollOffset: 0px;
+      animation: bgScroll linear infinite;
+      animation-duration: 30s;
+    }
+
+    @keyframes bgScroll {
+      0% {
+        transform: translateX(-50%) translateY(var(--scrollOffset));
+      }
+      100% {
+        transform: translateX(-50%) translateY(calc(var(--scrollOffset) - var(--scrollDistance)));
+      }
+    }
+
+    #list {
+      position: absolute;
+      top: 0;
+      left: 51.2%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+    }
+
+    .name {
+      height: 60px;
+      line-height: 60px;
+      font-size: 2rem;
+      text-align: center;
+      margin: 0;
+      color: #494848;
+      transition: transform 0.2s ease, color 0.2s ease;
+      transform-origin: center center;
+    }
+
+    .name.active {
+      transform: scale(1.5);
+    }
+
+    .name.winner {
+      color: white !important;
+    }
+
+    #rollButton {
+      margin-top: 1850px;
+      margin-left: 50px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border: none;
+      background: #444;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+      z-index: 3;
+    }
+
+    #winnerScreen {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 1238px;
+      height: 829px;
+      transform: translate(-50%, -50%);
+      background: url('C:/Users/Vik/Desktop/giveaway/winner.png') no-repeat center center;
+      background-size: cover;
+      z-index: 9999;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.75);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #winnerTicker {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 3rem;
+      margin-top: 155px;
+      white-space: nowrap;
+      display: inline-block;
+      animation: scrollText 35s linear infinite;
+    }
+
+    #winnerTicker2 {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 3rem;
+      margin-top: 600px;
+      white-space: nowrap;
+      display: inline-block;
+      animation: scrollTextReverse 55s linear infinite;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translateX(25%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @keyframes scrollTextReverse {
+      0% { transform: translateX(-210%); }
+      100% { transform: translateX(25%); }
+    }
+
+    .spacer {
+      height: 200vh;
+      width: 100%;
+    }
+
+    .line-img {
+      opacity: 0.4;
+      user-select: none;
+      pointer-events: none;
+      display: block;
+    }
+
+    #countdown {
+      font-family: 'League Gothic', sans-serif;
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      color: #8e8e8e;
+      position: absolute;
+      top: 1372px;
+      left: 73%;
+      font-size: 4rem;
+      padding: 8px 12px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <audio id="rollSound" src="C:/Users/Vik/Desktop/giveaway/roll.mp3" preload="auto"></audio>
+  <audio id="winnerSound" src="C:/Users/Vik/Desktop/giveaway/winner.mp3" preload="auto"></audio>
+
+  <div id="wrapper">
+    <div id="bgList"></div>
+    <div id="list"></div>
+  </div>
+
+  <div id="countdown">TIME UNTIL START: 15:00</div>
+
+  <button id="rollButton">Roll</button>
+
+  <div id="winnerScreen">
+    <div id="winnerTicker"></div>
+    <div id="winnerTicker2"></div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <script>
+    const names = [".ekaterinaa.", ".jemi19", ".live867", ".mr..cat..", ".viktorbg", "2loyal.vision", "1momo1", "bob4o66", "bob4o67", "_n1k00", "aleks4o._.", "alex2011vn", "alex4o_real", "alexerzz.", "alphata2", "amadorrivas", "arbus0488", "bgmitkof673", "bobarmontior", "bobiebob", "bordera", "brat4ed17036", "bxbxhxll", "cartov4eto", "cekata0860", "chuval3339", "commandossloth", "d0br9v", "deadskull347", "deathdixie", "deomirrr.", "deoproto", "dhleksaaa", "dragana67", "Ducky", "emkata_78", "emo0972", "exlilith", "ganchevv__", "gdimitrov02", "georgiewv_10", "go6kata_21", "gogerprime", "goofy_guy1432", "issaramisgay", "iv4obgmaina", "ivailo7", "ivan40bg", "j4x3d", "kazakato", "kikoeksdi", "kimjongun02112", "koleto_betona", "kopito1994", "kr1s1", "kristian_milushev", "ladiffxd", "lamata8829", "legion_ultras", "levskihiders", "lilk", "lokkiy", "lolmonroe", "lubo9000", "ludaka2301", "m15s15", "m4rt1xz", "martenzzo", "martichill2012", "martico0093", "matey9763", "mauckoso", "meankittyy", "meme_god690761", "mimityson", "mirchoooo", "mitacheto_22", "mitaka_e_tuk", "mitioochite_0", "moneyoverbitches420", "morskata_pehota", "mr.k0ksan", "nahapan.charshaf", "natkooooooo", "niki_betona", "nikiangelov1234", "nikihabate", "nikipatlajana", "nikitomaina_83441", "nikola39043", "nintendoproniki", "not_marto", "noting_foryou", "Pecata47", "peshko_e_kirka1948", "plamen_21654", "porumkata", "powderbg", "preslav69", "provalanalyusko", "rando328", "riot.bg", "senior_abra_kadabra_67460", "sladkoto_moni", "snipera", "sniperlight", "soi052530", "sokchekapi99", "some0ne1917", "spondjbob..", "stef_4o", "taboretkata", "ted07777", "theunknown08", "thews21", "tonchewa", "tsar.of_nothing", "twizzy1373", "uiop.bg", "uncle cappuccino", "ur_bro_zoro", "v1p3r_darix", "v1perX", "vainzj", "valentinokid3", "vangataabg", "vanko2560", "vonsterabg", "w_lukyanov", "waffle3285", "wazzap2374", "WRISTSLXTTER", "x_nicko_x", "xrznt_87119", "xx_k2_xx06", "yoana21.", "yolothepandasq", "yona_uwu", "zarcho0895_90257", "zasca03", "zelenidomati", "zemenkamuk", "zerndiex_mdfk", "zmijata1123", "Đ₳ł₥₳₭Ø"
+];
+    const rowHeight = 60;
+    const wrapper = document.getElementById("wrapper");
+    const bgList = document.getElementById("bgList");
+    const list = document.getElementById("list");
+    const button = document.getElementById("rollButton");
+    const rollSound = document.getElementById("rollSound");
+    const winnerSound = document.getElementById("winnerSound");
+    const winnerScreen = document.getElementById("winnerScreen");
+    const winnerTicker = document.getElementById("winnerTicker");
+
+    const seqHeight = names.length * rowHeight;
+    const wrapperHeight = wrapper.clientHeight;
+    const reps = Math.ceil((wrapperHeight + seqHeight) / seqHeight);
+    for (let r = 0; r < reps; r++) {
+      names.forEach(text => {
+        const div = document.createElement("div");
+        div.textContent = text;
+        div.className = "name";
+        bgList.appendChild(div);
+
+        const line = document.createElement("img");
+        line.src = "C:/Users/Vik/Desktop/giveaway/line.png";
+        line.className = "line-img";
+        bgList.appendChild(line);
+      });
+    }
+    bgList.style.setProperty("--scrollDistance", `${seqHeight}px`);
+
+    button.addEventListener("click", rollNames);
+
+    function playRollSound() {
+      const soundClone = rollSound.cloneNode(true);
+      soundClone.play();
+    }
+
+    function rollNames() {
+      const style = window.getComputedStyle(bgList);
+      const matrix = new DOMMatrixReadOnly(style.transform);
+      const currentY = matrix.m42;
+
+      let indexOffset = Math.floor(-currentY / rowHeight);
+      indexOffset = ((indexOffset % names.length) + names.length) % names.length;
+      const visibleCount = Math.ceil(wrapper.clientHeight / rowHeight);
+      const visibleItems = [];
+      for (let i = 0; i < visibleCount; i++)
+        visibleItems.push(names[(indexOffset + i) % names.length]);
+      const initialOffset = currentY + indexOffset * rowHeight;
+
+      bgList.style.display = "none";
+      button.disabled = true;
+      list.innerHTML = "";
+
+      const ticks = 200;
+      const seq = [...visibleItems];
+      for (let i = 0; i < ticks - 1; i++)
+        seq.push(names[Math.floor(Math.random() * names.length)]);
+      const chosen = names[Math.floor(Math.random() * names.length)];
+      seq.push(chosen);
+      for (let i = 0; i < visibleCount; i++)
+        seq.push(names[Math.floor(Math.random() * names.length)]);
+
+      seq.forEach(text => {
+        const div = document.createElement("div");
+        div.textContent = text;
+        div.className = "name";
+        list.appendChild(div);
+
+        const line = document.createElement("img");
+        line.src = "C:/Users/Vik/Desktop/giveaway/line.png";
+        line.className = "line-img";
+        list.appendChild(line);
+      });
+
+      const totalDistance = (seq.length - visibleCount) * rowHeight;
+      list.style.transform = `translateX(-50%) translateY(${initialOffset}px)`;
+
+      let lastActive = null;
+      const checkInterval = setInterval(() => {
+        const centerY = wrapper.getBoundingClientRect().top + wrapper.clientHeight / 2;
+        const children = Array.from(list.querySelectorAll(".name"));
+        children.forEach(child => {
+          const rect = child.getBoundingClientRect();
+          const mid = rect.top + rect.height / 2;
+          const isActive = Math.abs(mid - centerY) < rowHeight / 2;
+          child.classList.toggle("active", isActive);
+          child.classList.toggle("winner", isActive);
+          if (isActive && lastActive !== child) {
+            lastActive = child;
+            playRollSound();
+          }
+        });
+      }, 50);
+
+      const animation = list.animate([
+        { transform: `translateX(-50%) translateY(${initialOffset}px)` },
+        { transform: `translateX(-50%) translateY(${initialOffset - totalDistance}px)` }
+      ], {
+        duration: 15000,
+        easing: "cubic-bezier(0.33,0.0,0.67,1.0)"
+      });
+
+      animation.onfinish = () => {
+        clearInterval(checkInterval);
+        list.style.transform = `translateX(-50%) translateY(${initialOffset - totalDistance}px)`;
+        button.disabled = false;
+
+        const message = `<span style='color:white;'> THE WINNER IS </span><span style='color:#3c3c3c;'>${chosen.toUpperCase()}</span>`;
+        const message2 = `<span style='color:white;'> THE WINNER IS </span><span style='color:#3c3c3c;'>${chosen.toUpperCase()}</span>`;
+        winnerTicker.innerHTML = message.repeat(20);
+        winnerTicker2.innerHTML = message2.repeat(20);
+        winnerScreen.style.display = "flex";
+        winnerSound.play();
+
+        setTimeout(() => {
+          winnerScreen.style.display = "none";
+        }, 30000);
+      };
+    }
+
+    let totalSeconds = 15 * 60;
+    const countdownEl = document.getElementById("countdown");
+
+    function updateCountdown() {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      countdownEl.textContent = `TIME UNTIL START: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      if (totalSeconds > 0) {
+        totalSeconds--;
+      } else {
+        clearInterval(countdownInterval);
+        countdownEl.textContent = "STARTING...";
+      }
+    }
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
