@@ -19,7 +19,7 @@
       align-items: center;
       overflow-y: auto;
       flex-direction: column;
-      background: white url('C:/Users/Vik/Desktop/giveaway/bg3.png') no-repeat center top;
+      background: white url('bg3.png') no-repeat center top;
       background-size: auto;
     }
 
@@ -106,7 +106,7 @@
       width: 1238px;
       height: 829px;
       transform: translate(-50%, -50%);
-      background: url('C:/Users/Vik/Desktop/giveaway/winner.png') no-repeat center center;
+      background: url('winner.png') no-repeat center center;
       background-size: cover;
       z-index: 9999;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.75);
@@ -169,8 +169,8 @@
   </style>
 </head>
 <body>
-  <audio id="rollSound" src="C:/Users/Vik/Desktop/giveaway/roll.mp3" preload="auto"></audio>
-  <audio id="winnerSound" src="C:/Users/Vik/Desktop/giveaway/winner.mp3" preload="auto"></audio>
+  <audio id="rollSound" src="roll.mp3" preload="auto"></audio>
+  <audio id="winnerSound" src="winner.mp3" preload="auto"></audio>
 
   <div id="wrapper">
     <div id="bgList"></div>
@@ -212,7 +212,7 @@
         bgList.appendChild(div);
 
         const line = document.createElement("img");
-        line.src = "C:/Users/Vik/Desktop/giveaway/line.png";
+        line.src = "line.png";
         line.className = "line-img";
         bgList.appendChild(line);
       });
@@ -259,7 +259,7 @@
         list.appendChild(div);
 
         const line = document.createElement("img");
-        line.src = "C:/Users/Vik/Desktop/giveaway/line.png";
+        line.src = "line.png";
         line.className = "line-img";
         list.appendChild(line);
       });
